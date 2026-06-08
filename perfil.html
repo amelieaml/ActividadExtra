@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Mi Perfil</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo" id="go-to-home" style="cursor:pointer;">NEXUS<span>.</span></div>
+        <nav class="nav-menu">
+            <a href="index.html">Inicio</a>
+            <a href="catalogo.html">Catálogo</a>
+            <a href="admin.html" id="nav-link-admin" style="display: none;">Panel Admin</a>
+            <a href="perfil.html" id="nav-profile-link" style="display: none;">Mi Perfil</a>
+        </nav>
+        <div class="nav-actions">
+            <button id="nav-cart-btn" class="btn-theme cart-btn-pos">
+                🛒 Carrito <span id="cart-badge" class="cart-badge">0</span>
+            </button>
+            <button id="theme-toggle" class="btn-theme">☀️ Light</button>
+        </div>
+    </header>
+
+    <div id="profile-container" class="profile-section dynamic-view" style="display: none;">
+        <div class="profile-card">
+            <div class="profile-header-view">
+                <img id="profile-avatar-img" src="" alt="Avatar" class="profile-avatar">
+                <div class="profile-meta">
+                    <h2 id="profile-display-name" class="text-gradient">Nombre de Usuario</h2>
+                    <p id="profile-display-role" style="color: var(--text-secondary); font-weight: 600; font-size: 0.9rem; margin-top: 0.2rem;">Rol: Cliente</p>
+                </div>
+            </div>
+
+            <form id="profile-edit-form">
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+                    <input type="text" id="profile-name" required>
+                </div>
+                <div class="form-group">
+                    <label>URL del Avatar</label>
+                    <input type="url" id="profile-avatar-url" placeholder="https://api.dicebear.com/...">
+                </div>
+                <div class="form-group">
+                    <label>Dirección de Envío Principal</label>
+                    <textarea id="profile-address" rows="3" placeholder="Introduce tu dirección de despacho completa..."></textarea>
+                </div>
+                <div class="profile-actions">
+                    <button type="button" id="btn-logout" class="btn-cta secondary" style="border-color: #ef4444; color: #ef4444;">Cerrar Sesión</button>
+                    <button type="submit" class="btn-cta primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="auth-container" class="auth-section dynamic-view" style="display: none;">
+        
+        <div id="login-card" class="auth-card">
+            <h2>Iniciar Sesión</h2>
+            <p class="auth-subtitle">Ingresa tus credenciales del ecosistema Nexus</p>
+            <form id="login-form">
+                <div class="form-group">
+                    <label>Correo Electrónico</label>
+                    <input type="email" id="login-email" required placeholder="correo@ucab.edu.ve">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="login-password" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn-cta primary w-100 mt-1">Acceder de Forma Segura</button>
+                <div class="auth-links">
+                    <p>¿No posees una cuenta? <a href="#" id="go-to-register">Regístrate</a></p>
+                    <p class="mt-05"><a href="#" id="go-to-recover">¿Olvidaste tu contraseña?</a></p>
+                </div>
+            </form>
+        </div>
+
+        <div id="register-card" class="auth-card" style="display: none;">
+            <h2>Creating Cuenta</h2>
+            <p class="auth-subtitle">Únete al club de compras premium</p>
+            <form id="register-form">
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+                    <input type="text" id="reg-name" required placeholder="Ej. Juan Pérez">
+                </div>
+                <div class="form-group">
+                    <label>Correo Electrónico</label>
+                    <input type="email" id="reg-email" required placeholder="ejemplo@ucab.edu.ve">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="reg-password" required placeholder="Mínimo 3 caracteres">
+                </div>
+                <div class="form-group">
+                    <label>Rol de Usuario</label>
+                    <select id="reg-role">
+                        <option value="Cliente">Cliente</option>
+                        <option value="Administrador">Administrador</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-cta primary w-100 mt-1">Completar Afiliación</button>
+                <div class="auth-links">
+                    <p>¿Ya estás registrado? <a href="#" id="go-to-login">Inicia Sesión</a></p>
+                </div>
+            </form>
+        </div>
+
+        <div id="recover-card" class="auth-card" style="display: none;">
+            <h2>Recuperar Acceso</h2>
+            <p class="auth-subtitle">Introduce tu correo para leer la contraseña de la persistencia</p>
+            <form id="recover-form">
+                <div class="form-group">
+                    <label>Correo de Registro</label>
+                    <input type="email" id="recover-email" required placeholder="correo@ucab.edu.ve">
+                </div>
+                <button type="submit" class="btn-cta primary w-100 mt-1">Consultar Credenciales</button>
+                <div class="auth-links">
+                    <p><a href="#" id="back-to-login-from-recover">Volver al login</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="cart-drawer" class="cart-drawer">
+        <div class="cart-drawer-content">
+            <div class="cart-drawer-header">
+                <h3>Tu Carrito</h3>
+                <button id="close-cart-btn" class="close-btn">&times;</button>
+            </div>
+            <div id="cart-items-container" class="cart-items-list"></div>
+            <div class="cart-drawer-footer">
+                <div class="cart-summary-row"><span>Subtotal:</span><span id="cart-subtotal">$0.00</span></div>
+                <div class="cart-summary-row total"><span>Total (IVA Inc. 16%):</span><span id="cart-total">$0.00</span></div>
+                <button id="btn-go-to-checkout" class="btn-cta primary w-100 mt-1 txt-center">Proceder al Pago</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>© 2026 NEXUS Labs E-Commerce. Todos los derechos reservados.</p>
+            <div id="connection-status" class="status-indicator online">
+                <span class="status-dot"></span><span id="status-text">Sistema En Línea</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

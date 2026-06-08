@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Panel de Administración</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- BARRA DE NAVEGACIÓN GLOBAL -->
+    <header class="navbar">
+        <div class="logo" id="go-to-home" style="cursor:pointer;">NEXUS<span>.</span></div>
+        <nav class="nav-menu">
+            <a href="index.html">Inicio</a>
+            <a href="catalogo.html">Catálogo</a>
+            <a href="admin.html" class="active" id="nav-link-admin">Panel Admin</a>
+            <a href="perfil.html" id="nav-profile-link" style="display: none;">Mi Perfil</a>
+        </nav>
+        <div class="nav-actions">
+            <button id="nav-auth-btn" class="btn-theme btn-gradient-acc">Mi Cuenta</button>
+            <button id="theme-toggle" class="btn-theme">☀️ Light</button>
+        </div>
+    </header>
+
+    <!-- PANEL DE ADMINISTRACIÓN PRINCIPAL -->
+    <div id="admin-container" class="catalog-section dynamic-view">
+        <div class="section-header sh-left">
+            <h2 class="text-gradient">Panel de Control Administrativo</h2>
+            <p>Gestión global de inventario, analíticas de rendimiento y distribución de órdenes.</p>
+        </div>
+
+        <!-- REQUERIMIENTO 6: PANEL VISUAL DE MÉTRICAS -->
+        <section class="admin-metrics-grid">
+            <div class="metric-card">
+                <div class="icon-wrapper" style="background: linear-gradient(135deg, #10b981, #059669);">💰</div>
+                <div>
+                    <h3>Total Ingresos</h3>
+                    <p id="metric-total-income" class="metric-value">$0.00</p>
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="icon-wrapper" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">📊</div>
+                <div>
+                    <h3>Usuarios (Registrados vs Activos)</h3>
+                    <p id="metric-users-count" class="metric-value">0 / 0</p>
+                </div>
+            </div>
+            <div class="metric-card" style="grid-column: span 1;">
+                <div class="icon-wrapper" style="background: linear-gradient(135deg, #f59e0b, #d97706);">🔥</div>
+                <div>
+                    <h3>Top 3 Más Vendidos</h3>
+                    <ol id="metric-top-products" class="metric-list">
+                        <li>Sin datos de ventas</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- LAYOUT DE GESTIÓN (CRUD + VENTAS) -->
+        <div class="catalog-layout" style="margin-top: 3rem;">
+            
+            <!-- FORMULARIO CRUD (CREAR / EDITAR) -->
+            <aside class="filter-sidebar">
+                <h3 id="form-crud-title">📦 Agregar Nuevo Producto</h3>
+                <form id="crud-product-form" style="margin-top: 1rem;">
+                    <input type="hidden" id="crud-prod-id">
+                    <div class="form-group">
+                        <label>Título del Producto</label>
+                        <input type="text" id="crud-prod-title" required placeholder="Ej. Memoria RAM DDR5 32GB">
+                    </div>
+                    <div class="form-group">
+                        <label>Precio ($)</label>
+                        <input type="number" id="crud-prod-price" step="0.01" required placeholder="Ej. 149.99">
+                    </div>
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        <input type="text" id="crud-prod-category" required placeholder="Ej. electronics">
+                    </div>
+                    <div class="form-group">
+                        <label>URL de la Imagen</label>
+                        <input type="url" id="crud-prod-image" required placeholder="https://images.unsplash.com/...">
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
+                        <button type="button" id="btn-crud-cancel" class="btn-cta secondary" style="display:none; padding: 0.7rem 1rem;">Cancelar</button>
+                        <button type="submit" id="btn-crud-submit" class="btn-cta primary" style="width: 100%; padding: 0.7rem;">Guardar Producto</button>
+                    </div>
+                </form>
+            </aside>
+
+            <!-- TABLAS DE CONTROL (INVENTARIO Y HISTORIAL DE VENTAS) -->
+            <main style="display: flex; flex-direction: column; gap: 3rem; overflow-x: auto;">
+                
+                <!-- TABLA DE INVENTARIO -->
+                <div class="main-cart-items-block" style="background: var(--bg-surface);">
+                    <h3 style="margin-bottom: 1rem;" class="text-gradient">Inventario de Productos</h3>
+                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid var(--border-color); opacity: 0.7; font-size: 0.85rem;">
+                                <th style="padding: 0.5rem 1rem;">Imágen</th>
+                                <th style="padding: 0.5rem 1rem;">Producto</th>
+                                <th style="padding: 0.5rem 1rem;">Categoría</th>
+                                <th style="padding: 0.5rem 1rem;">Precio</th>
+                                <th style="padding: 0.5rem 1rem; text-align: center;">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-inventory-table-body">
+                            <!-- Inyección dinámica -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- TABLA DE HISTORIAL DE VENTAS -->
+                <div class="main-cart-items-block" style="background: var(--bg-surface);">
+                    <h3 style="margin-bottom: 1rem;" class="text-gradient">Control de Historial de Ventas</h3>
+                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid var(--border-color); opacity: 0.7; font-size: 0.85rem;">
+                                <th style="padding: 0.5rem 1rem;">ID Orden</th>
+                                <th style="padding: 0.5rem 1rem;">Cliente</th>
+                                <th style="padding: 0.5rem 1rem;">Fecha</th>
+                                <th style="padding: 0.5rem 1rem;">Total Neto</th>
+                                <th style="padding: 0.5rem 1rem; text-align: center;">Estado de Envío</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-sales-table-body">
+                            <!-- Inyección dinámica -->
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- FOOTER GLOBAL -->
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>© 2026 NEXUS Labs E-Commerce. Todos los derechos reservados.</p>
+            <div id="connection-status" class="status-indicator online">
+                <span class="status-dot"></span><span id="status-text">Sistema En Línea</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - E-Commerce Premium</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- BARRA DE NAVEGACIÓN GLOBAL -->
+    <header class="navbar">
+        <div class="logo" id="go-to-home" style="cursor:pointer;">NEXUS<span>.</span></div>
+        <!-- Reemplaza el menú de navegación de tus otros archivos para que incluya la etiqueta de admin -->
+        <nav class="nav-menu">
+            <a href="index.html">Inicio</a>
+            <a href="catalogo.html">Catálogo</a>
+            <a href="admin.html" id="nav-link-admin" style="display: none;">Panel Admin</a>
+            <a href="perfil.html" id="nav-auth-btn" class="nav-btn">Iniciar Sesión</a>
+        </nav>
+        <div class="nav-actions">
+            <button id="nav-cart-btn" class="btn-theme cart-btn-pos">
+                🛒 Carrito <span id="cart-badge" class="cart-badge">0</span>
+            </button>
+            <button id="theme-toggle" class="btn-theme">☀️ Light</button>
+        </div>
+    </header>
+
+    <!-- 1. SECCIÓN VISTA: LANDING PAGE -->
+    <div id="landing-container" class="dynamic-view">
+        
+        <!-- BANNER PRINCIPAL (HERO DE ALTO IMPACTO) -->
+        <section class="hero-banner">
+            <div class="hero-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+            </div>
+            <div class="hero-content">
+                <div class="hero-tag">Ecosistema Autónomo 2026</div>
+                <h1>Descubre el E-Commerce<br><span class="gradient-text">Siguiente Generación</span></h1>
+                <p>Accede a piezas tecnológicas exclusivas y accesorios premium con almacenamiento autónomo y transacciones fluidas en cualquier dispositivo.</p>
+                <div class="hero-buttons">
+                    <!-- Botón destacado de llamado a la acción (CTA) que redirige directamente al catálogo -->
+                    <button onclick="window.location.href='catalogo.html'" class="btn-cta primary">Explorar Tienda</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN BENEFICIOS (PILARES DE LA TIENDA EN COLUMNAS/CUADRÍCULA) -->
+        <section class="benefits-section">
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="icon-wrapper">📦</div>
+                    <h3>Envíos Premium</h3>
+                    <p>Despacho inmediato a nivel nacional con tracking avanzado en tiempo real.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon-wrapper">🔒</div>
+                    <h3>Pago Seguro</h3>
+                    <p>Garantía transaccional cifrada de extremo a extremo mediante tokens locales.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon-wrapper">⚡</div>
+                    <h3>Modo Autónomo</h3>
+                    <p>Navega, añade al carrito y procesa tus compras incluso sin conexión a internet.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN DE PRODUCTOS DESTACADOS (CUADRÍCULA PEQUEÑA PARA 3 A 4 PRODUCTOS BIEN CALIFICADOS) -->
+        <section class="featured-section">
+            <div class="section-header">
+                <h2>Colecciones Destacadas</h2>
+                <p>Nuestra selección de vanguardia extraída dinámicamente de la base de datos.</p>
+            </div>
+            <!-- Contenedor manipulado dinámicamente por la función renderHomeCatalog() en app.js -->
+            <div class="products-grid" id="featured-products">
+                <p class="auth-subtitle" style="text-align: center; width: 100%;">Cargando piezas exclusivas...</p>
+            </div>
+        </section>
+
+        <!-- SECCIÓN DE TESTIMONIOS / RESEÑAS ESTÉTICAS -->
+        <section class="testimonials-section">
+            <div class="section-header">
+                <h2>Opiniones de la Comunidad</h2>
+                <p>Lo que dicen nuestros clientes satisfechos sobre la experiencia premium.</p>
+            </div>
+            <div class="testimonials-container">
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="comment">"La interfaz de usuario fluida y la capacidad de seguir operando sin internet es de otro nivel."</p>
+                    <div class="author-info">
+                        <div class="avatar-mock">CA</div>
+                        <div>
+                            <h4>Carlos Alviarez</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.8rem;">Cliente Verificado</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- 2. SECCIÓN MÓDULO AUTENTICACIÓN -->
+    <!-- Este contenedor es CRÍTICO. Si se elimina, app.js rompe al no encontrar los IDs de inicio de sesión/registro -->
+    <div id="auth-container" class="auth-section dynamic-view" style="display: none;">
+        
+        <!-- FORMULARIO DE INICIO DE SESIÓN -->
+        <div id="login-card" class="auth-card">
+            <h2>Iniciar Sesión</h2>
+            <p class="auth-subtitle">Ingresa tus credenciales del ecosistema Nexus</p>
+            <form id="login-form">
+                <div class="form-group">
+                    <label>Correo Electrónico</label>
+                    <input type="email" id="login-email" required placeholder="correo@ucab.edu.ve">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="login-password" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn-cta primary w-100 mt-1">Acceder de Forma Segura</button>
+                <div class="auth-links">
+                    <p>¿No posees una cuenta? <a href="#" id="go-to-register">Regístrate</a></p>
+                    <p class="mt-05"><a href="#" id="go-to-recover">¿Olvidaste tu contraseña?</a></p>
+                </div>
+            </form>
+        </div>
+
+        <!-- FORMULARIO DE REGISTRO -->
+        <div id="register-card" class="auth-card" style="display: none;">
+            <h2>Crear Cuenta</h2>
+            <p class="auth-subtitle">Únete al club de compras premium</p>
+            <form id="register-form">
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+                    <input type="text" id="reg-name" required placeholder="Ej. Juan Pérez">
+                </div>
+                <div class="form-group">
+                    <label>Correo Electrónico</label>
+                    <input type="email" id="reg-email" required placeholder="ejemplo@ucab.edu.ve">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="reg-password" required placeholder="Mínimo 3 caracteres">
+                </div>
+                <div class="form-group">
+                    <label>Rol de Usuario</label>
+                    <select id="reg-role">
+                        <option value="cliente">Cliente</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-cta primary w-100 mt-1">Completar Afiliación</button>
+                <div class="auth-links">
+                    <p>¿Ya estás registrado? <a href="#" id="go-to-login">Inicia Sesión</a></p>
+                </div>
+            </form>
+        </div>
+
+        <!-- FORMULARIO DE RECUPERACIÓN DE CONTRASEÑA -->
+        <div id="recover-card" class="auth-card" style="display: none;">
+            <h2>Recuperar Acceso</h2>
+            <p class="auth-subtitle">Introduce tu correo para leer la contraseña de la persistencia</p>
+            <form id="recover-form">
+                <div class="form-group">
+                    <label>Correo de Registro</label>
+                    <input type="email" id="recover-email" required placeholder="correo@ucab.edu.ve">
+                </div>
+                <button type="submit" class="btn-cta primary w-100 mt-1">Consultar Credenciales</button>
+                <div class="auth-links">
+                    <p><a href="#" id="back-to-login-from-recover">Volver al login</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- PIE DE PÁGINA GLOBAL (FOOTER) -->
+    <footer class="footer">
+        
+        <!-- FORMULARIO DE SUSCRIPCIÓN AL NEWSLETTER (CAPTURA AL FINAL DE LA PÁGINA) -->
+        <div class="newsletter-card" style="margin-bottom: 2.5rem;">
+            <h2>Suscripción al Club de Innovación</h2>
+            <p>Introduce tu email para capturar tu suscripción en nuestro newsletter local.</p>
+            <form id="newsletter-form" class="newsletter-form">
+                <input type="email" placeholder="Introduce tu email" required>
+                <button type="submit" class="btn-submit">Unirse</button>
+            </form>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2026 NEXUS Labs E-Commerce. Todos los derechos reservados.</p>
+            <!-- INDICADOR VISUAL DINÁMICO (ONLINE / OFFLINE) -->
+            <div id="connection-status" class="status-indicator online">
+                <span class="status-dot"></span><span id="status-text">Sistema En Línea</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
