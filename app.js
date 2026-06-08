@@ -1,16 +1,9 @@
-// =========================================================================
-// 0. ESTADO GLOBAL E INTEGRACIÓN CON LA API REAL (FakeStoreAPI)
-// =========================================================================
-let localProducts = [];       // Se poblará con TODOS los productos de la API
-let premiumProductsMock = []; // Guardará los primeros 4 para los destacados del Home
 
-/**
- * Función Asíncrona para consumir la API Externa de forma correcta
- * Cumple con los requerimientos de conectividad y carga dinámica
- */
+let localProducts = [];       
+let premiumProductsMock = []; 
+
 async function loadProductsFromAPI() {
     try {
-        // Petición nativa a la API de productos
         const response = await fetch('https://fakestoreapi.com/products');
         
         if (!response.ok) {
@@ -19,9 +12,7 @@ async function loadProductsFromAPI() {
         
         const apiData = await response.json();
         
-        // Mapeamos y normalizamos los datos de la API para asegurar imágenes estables de respaldo
         localProducts = apiData.map(product => {
-            // Unsplash backups en caso de que los enlaces de la API den problemas de carga local
             let backupImage = product.image;
             if (product.id === 1) backupImage = "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&auto=format&fit=crop&q=60";
             if (product.id === 2) backupImage = "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500&auto=format&fit=crop&q=60";
@@ -32,22 +23,18 @@ async function loadProductsFromAPI() {
                 id: product.id,
                 title: product.title,
                 price: product.price,
-                category: product.category, // Mantiene categorías reales de la API: "men's clothing", "jewelery", etc.
-                image: backupImage
+                category: product.category, 
             };
         });
 
-        // Seleccionamos las primeras 4 piezas para la sección "Destacados" de la Landing
         premiumProductsMock = localProducts.slice(0, 4);
 
-        // Una vez los datos están listos en memoria, disparamos los renderizados
         renderHomeCatalog();
         populateCategoriesFilter();
         renderCatalog();
 
     } catch (error) {
         console.error("Fallo crítico al conectar con la API, activando modo de contingencia local:", error);
-        // Respaldo inmediato por si la API o el internet fallan en plena presentación con el profesor
         localProducts = [
             { id: 1, title: "Nexus Backpack Explorer", price: 89.50, category: "bags", image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&auto=format&fit=crop&q=60" },
             { id: 2, title: "Chaqueta Aviador Cyber-Fit", price: 124.99, category: "clothing", image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500&auto=format&fit=crop&q=60" },
@@ -61,9 +48,7 @@ async function loadProductsFromAPI() {
     }
 }
 
-// =========================================================================
-// 1. ROUTER HÍBRIDO (SPA + REDIRECCIÓN FÍSICA COHERENTE)
-// =========================================================================
+
 const views = {
     landing: document.getElementById('landing-container'),
     auth: document.getElementById('auth-container'),
@@ -126,10 +111,6 @@ if (recoverLink) recoverLink.addEventListener('click', (e) => { e.preventDefault
 const backLoginLink = document.getElementById('back-to-login-from-recover');
 if (backLoginLink) backLoginLink.addEventListener('click', (e) => { e.preventDefault(); showAuthCard('login'); });
 
-
-// =========================================================================
-// 2. MODO DÍA / NOCHE (PERSISTENTE)
-// =========================================================================
 const themeToggle = document.getElementById('theme-toggle');
 const currentTheme = localStorage.getItem('theme') || 'dark';
 
@@ -151,10 +132,6 @@ function updateBtnThemeIcon(theme) {
     themeToggle.textContent = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
 }
 
-
-// =========================================================================
-// 3. CAPACIDAD ONLINE/OFFLINE: INDICADOR VISUAL DINÁMICO
-// =========================================================================
 const statusIndicator = document.getElementById('connection-status');
 const statusText = document.getElementById('status-text');
 
@@ -173,14 +150,9 @@ window.addEventListener('online', updateNetworkStatus);
 window.addEventListener('offline', updateNetworkStatus);
 updateNetworkStatus();
 
-
-// =========================================================================
-// 4. REGISTRO, AUTENTICACIÓN Y PERFIL DE USUARIO (CON PROTOCOLO DE ROLES)
-// =========================================================================
 const navAuthBtn = document.getElementById('nav-auth-btn');
 const navProfileLink = document.getElementById('nav-profile-link');
 
-// Inicializar base de datos de usuarios si no existe
 if (!localStorage.getItem('users')) {
     const defaultUsers = [
         { name: "Admin UCAB", email: "admin@ucab.edu.ve", password: "123", role: "admin", avatar: "", address: "Módulo 4, Laboratorio de Informática" },
@@ -193,26 +165,20 @@ function checkSession() {
     const currentUser = JSON.parse(sessionStorage.getItem('activeUser'));
     const navLinkAdmin = document.getElementById('nav-link-admin');
     
-    // Apagón visual preventivo absoluto para eliminar el parpadeo molesto
     if (views.auth) views.auth.style.display = 'none';
     if (views.profile) views.profile.style.display = 'none';
     
     if (currentUser) {
-        // --- CASO: USUARIO LOGUEADO ---
         if (navAuthBtn) navAuthBtn.textContent = "Mi Cuenta"; 
         if (navProfileLink) navProfileLink.style.display = "inline-block";
         
-        // NORMALIZACIÓN: Pasamos el rol a minúsculas para evitar conflictos de tipado
         const userRole = currentUser.role ? currentUser.role.toLowerCase() : '';
         
-        // Validación de permisos de administrador
         if (userRole === 'admin' || currentUser.email === 'admin@ucab.edu.ve') {
             if (navLinkAdmin) navLinkAdmin.style.display = "inline-block";
         } else {
-            // Si es un cliente normal, nos aseguramos de ocultar la pestaña Admin
             if (navLinkAdmin) navLinkAdmin.style.display = "none";
             
-            // Bloqueo estricto: Si un cliente intenta meterse a admin.html escribiendo la URL, lo sacamos
             if (window.location.pathname.includes('admin.html')) {
                 alert('🚫 Acceso denegado. Esta zona está reservada para administradores.');
                 window.location.href = 'catalogo.html';
@@ -220,7 +186,6 @@ function checkSession() {
             }
         }
         
-        // Rellenar los campos de la interfaz con los datos guardados del usuario
         const dispName = document.getElementById('profile-display-name');
         const dispRole = document.getElementById('profile-display-role');
         const inpName = document.getElementById('profile-name');
@@ -230,7 +195,6 @@ function checkSession() {
 
         if (dispName) dispName.textContent = currentUser.name;
         
-        // Aquí normalizamos la vista de la etiqueta del rol de forma elegante para el cliente
         if (dispRole) {
             dispRole.textContent = `Rol: ${(userRole === 'admin') ? 'Administrador' : 'Cliente'}`;
         }
@@ -243,18 +207,15 @@ function checkSession() {
             imgAvatar.src = currentUser.avatar ? currentUser.avatar : `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(currentUser.name)}`;
         }
 
-        // Si estamos en perfil.html y hay sesión, mostramos directamente sus detalles para modificar
         if (window.location.pathname.includes('perfil.html')) {
             if (views.profile) views.profile.style.display = 'block';
         }
 
     } else {
-        // --- CASO: USUARIO NO LOGUEADO ---
         if (navAuthBtn) navAuthBtn.textContent = "Mi Cuenta";
         if (navProfileLink) navProfileLink.style.display = "none";
         if (navLinkAdmin) navLinkAdmin.style.display = "none";
         
-        // Si está en perfil.html pero no ha iniciado sesión, lanzamos la alarma e iniciamos el login
         if (window.location.pathname.includes('perfil.html')) {
             if (views.auth) {
                 views.auth.style.display = 'block';
@@ -262,7 +223,6 @@ function checkSession() {
             }
         }
         
-        // Si un usuario no logueado intenta forzar la URL de admin.html, lo manda a loguearse primero
         if (window.location.pathname.includes('admin.html')) {
             window.location.href = 'perfil.html';
             return;
@@ -270,14 +230,11 @@ function checkSession() {
     }
 }
 
-// Control del Click en el botón "Mi Cuenta" del Navbar
 if (navAuthBtn) {
     navAuthBtn.addEventListener('click', (e) => {
         e.preventDefault();
         const currentUser = sessionStorage.getItem('activeUser');
         
-        // Al darle click, simplemente te redirige a perfil.html. 
-        // La función checkSession() se encargará de decidir si ves tus detalles o si te frena con la alerta.
         window.location.href = 'perfil.html';
     });
 }
@@ -316,7 +273,6 @@ if (loginForm) {
         const email = document.getElementById('login-email').value.trim();
         const password = document.getElementById('login-password').value;
 
-        // Validación prioritaria para la credencial semilla de la UCAB
         if (email === 'admin@ucab.edu.ve' && password === '123') {
             const adminUser = {
                 name: 'Administrador UCAB',
@@ -340,10 +296,8 @@ if (loginForm) {
             alert(`¡Conexión establecida! Bienvenido ${matchedUser.name}.`);
             e.target.reset();
             
-            // Forzamos la actualización de la sesión antes de redirigir
             checkSession();
             
-            // Evaluamos el rol ignorando si tiene mayúsculas
             const userRole = matchedUser.role ? matchedUser.role.toLowerCase() : '';
             if (userRole === 'admin') {
                 window.location.href = 'admin.html';
@@ -415,10 +369,6 @@ if (logoutBtn) {
     });
 }
 
-
-// =========================================================================
-// 5. RENDERIZADOS DINÁMICOS DESDE LOS DATOS DE LA API
-// =========================================================================
 function renderHomeCatalog() {
     const grid = document.getElementById('featured-products');
     if (!grid) return;
@@ -437,10 +387,6 @@ function renderHomeCatalog() {
     });
 }
 
-
-// =========================================================================
-// 6. FILTRADO MULTI-VARIABLE EN TIEMPO REAL (SOBRE DATOS DE LA API)
-// =========================================================================
 const searchInput = document.getElementById('search-input');
 const categoryFilter = document.getElementById('category-filter');
 const priceFilter = document.getElementById('price-filter');
@@ -487,11 +433,9 @@ function renderCatalog() {
     
     grid.innerHTML = filtered.length === 0 ? '<p class="auth-subtitle">No se encontraron productos.</p>' : '';
 
-    // Cargar las reseñas globales de localStorage para calcular promedios
     const allReviews = JSON.parse(localStorage.getItem('productReviews')) || {};
 
     filtered.forEach(product => {
-        // Calcular promedio de estrellas para este producto
         const productReviews = allReviews[product.id] || [];
         let starsHTML = '✨ Sin calificaciones';
         if (productReviews.length > 0) {
@@ -520,13 +464,8 @@ function renderCatalog() {
     });
 }
 
-
-// =========================================================================
-// 7. OPERACIONES DEL CARRITO REACTIVO (RENDERIZADO DUAL: NAV + SECCIÓN)
-// =========================================================================
 let cart = JSON.parse(sessionStorage.getItem('storeCart')) || [];
 
-// Eventos de control del panel del Nav
 const navCartBtn = document.getElementById('nav-cart-btn');
 const closeCartBtn = document.getElementById('close-cart-btn');
 if (navCartBtn && cartDrawer) navCartBtn.addEventListener('click', () => cartDrawer.classList.add('open'));
@@ -564,11 +503,10 @@ window.removeFromCart = function(productId) {
 
 function updateCartState() {
     sessionStorage.setItem('storeCart', JSON.stringify(cart));
-    renderCartDrawer();      // Actualiza la visualización del Nav/Drawer
-    renderMainCartSection(); // Actualiza la visualización de la Sección Principal
+    renderCartDrawer();     
+    renderMainCartSection(); 
 }
 
-// --- VISTA 1: Renderizado en el Nav / Drawer Lateral ---
 function renderCartDrawer() {
     const container = document.getElementById('cart-items-container');
     const badge = document.getElementById('cart-badge');
@@ -610,7 +548,6 @@ function renderCartDrawer() {
     if (totalEl) totalEl.textContent = `$${(subtotal * (1 + taxFactor)).toFixed(2)}`;
 }
 
-// --- VISTA 2: Renderizado en la Sección Principal de la Página ---
 function renderMainCartSection() {
     const mainContainer = document.getElementById('main-cart-items-page');
     if (!mainContainer) return;
@@ -669,9 +606,6 @@ function updateMainTotals(subtotal) {
     if (totalEl) totalEl.textContent = `$${(subtotal * (1 + taxFactor)).toFixed(2)}`;
 }
 
-// =========================================================================
-// 8. PASARELA DE CHECKOUT TRANSACCIONAL SEGURA
-// =========================================================================
 function processCheckoutValidation() {
     if (cart.length === 0) {
         alert("El carrito está vacío. Añade algunos productos primero.");
@@ -734,12 +668,8 @@ if (checkoutForm) {
     });
 }
 
-// =========================================================================
-// 9. INICIALIZACIÓN DE LA APLICACIÓN AL CARGAR EL DOM Y PROTOCOLO CRUD/MÉTRICAS
-// =========================================================================
-// Asegúrate de que tu sección 9 de inicialización quede limpia así:
 document.addEventListener('DOMContentLoaded', () => {
-    loadProductsFromAPI(); // Esta es la función correcta que activa la FakeStoreAPI
+    loadProductsFromAPI();
     checkSession();
     updateCartState();
 
@@ -757,9 +687,7 @@ if (newsletterForm) {
     });
 }
 
-// =========================================================================
-// 10. CONTROLADORES DE VISIBILIDAD DE LA SECCIÓN DE COMPRAS
-// =========================================================================
+
 const mainCartSection = document.getElementById('seccion-carrito');
 const mainCartDivider = document.getElementById('cart-divider');
 const closeMainCartBtn = document.getElementById('close-main-cart-section-btn');
@@ -779,9 +707,6 @@ if (navLinkCartPage && mainCartSection) {
     });
 }
 
-// =========================================================================
-// 11. PANEL DE ADMINISTRACIÓN (OPERATIVIDAD CRUD + RENDER DE MÉTRICAS)
-// =========================================================================
 function initAdminPanel() {
     renderAdminInventory();
     renderAdminSales();
@@ -794,7 +719,6 @@ function initAdminPanel() {
     if (cancelEditBtn) cancelEditBtn.addEventListener('click', clearCrudForm);
 }
 
-// Renderizar la tabla de inventario dinámico (CRUD de Productos)
 function renderAdminInventory() {
     const tbody = document.getElementById('admin-inventory-table-body');
     if (!tbody) return;
@@ -817,7 +741,6 @@ function renderAdminInventory() {
     });
 }
 
-// Renderizar tabla de ventas con selector de estado
 function renderAdminSales() {
     const tbody = document.getElementById('admin-sales-table-body');
     if (!tbody) return;
@@ -850,12 +773,10 @@ function renderAdminSales() {
     });
 }
 
-// Analítica y tabulación de métricas en tiempo real
 function renderAdminMetrics() {
     const sales = JSON.parse(localStorage.getItem('salesHistory')) || [];
     const users = JSON.parse(localStorage.getItem('users')) || [];
     
-    // 1. Calcular Ingresos Totales
     let totalIncome = 0;
     sales.forEach(order => {
         const value = parseFloat(order.total.replace('$', '')) || 0;
@@ -865,13 +786,11 @@ function renderAdminMetrics() {
     const incomeEl = document.getElementById('metric-total-income');
     if (incomeEl) incomeEl.textContent = `$${totalIncome.toFixed(2)}`;
 
-    // 2. Contador de Usuarios Registrados vs Activos
     const totalUsers = users.length;
     const activeUsers = sessionStorage.getItem('activeUser') ? 1 : 0; 
     const usersEl = document.getElementById('metric-users-count');
     if (usersEl) usersEl.textContent = `${totalUsers} Registrados / ${activeUsers} Activo(s)`;
 
-    // 3. Obtener el Top 3 de productos más vendidos
     const productCounts = {};
     sales.forEach(order => {
         if (order.items) {
@@ -901,7 +820,6 @@ function renderAdminMetrics() {
     }
 }
 
-// Controladores CRUD básicos para interacción de formulario de mutación
 function handleCrudSubmit(e) {
     e.preventDefault();
     const id = document.getElementById('crud-prod-id').value;
@@ -911,11 +829,9 @@ function handleCrudSubmit(e) {
     const image = document.getElementById('crud-prod-image').value.trim();
 
     if (id) {
-        // Modo Edición
         localProducts = localProducts.map(p => p.id === parseInt(id) ? { id: parseInt(id), title, price, category, image } : p);
         alert('Producto actualizado con éxito en el inventario local.');
     } else {
-        // Modo Creación
         const newProd = {
             id: localProducts.length > 0 ? Math.max(...localProducts.map(p => p.id)) + 1 : 1,
             title,
@@ -923,7 +839,7 @@ function handleCrudSubmit(e) {
             category,
             image
         };
-        localProducts.unshift(newProd); // Colocar al inicio
+        localProducts.unshift(newProd); 
         alert('Nuevo producto inyectado correctamente en el catálogo global.');
     }
 
@@ -963,7 +879,6 @@ function clearCrudForm() {
     document.getElementById('btn-crud-cancel').style.display = "none";
 }
 
-// Asegurar que al mutar estados de envío o inventario se refresquen las métricas
 window.updateOrderStatus = function(orderId, newStatus) {
     let sales = JSON.parse(localStorage.getItem('salesHistory')) || [];
     sales = sales.map(order => order.id === orderId ? { ...order, status: newStatus } : order);
@@ -973,9 +888,6 @@ window.updateOrderStatus = function(orderId, newStatus) {
     renderAdminMetrics(); 
 };
 
-// =========================================================================
-// 12. MÓDULO DE RESEÑAS Y CALIFICACIONES (FEEDBACK VISTA CLIENTE)
-// =========================================================================
 let currentSelectedRating = 5;
 
 window.openFeedbackModal = function(productId) {
@@ -992,11 +904,11 @@ window.openFeedbackModal = function(productId) {
         <p class="price" style="font-weight: 800; color: var(--accent);">$${product.price.toFixed(2)}</p>
     `;
 
-    setRating(5); // Resetear a 5 estrellas por defecto
+    setRating(5); 
     document.getElementById('feedback-comment').value = '';
     
     renderProductReviews(productId);
-    modal.style.right = '0'; // Abre el panel lateral deslizante
+    modal.style.right = '0'; 
 };
 
 window.closeFeedbackModal = function() {
@@ -1021,7 +933,6 @@ function renderProductReviews(productId) {
     const container = document.getElementById('reviews-container');
     if (!container) return;
 
-    // Limpiamos lo que sea que estuviera antes para evitar residuos de otros productos
     container.innerHTML = '';
 
     const pId = String(productId);
@@ -1033,7 +944,6 @@ function renderProductReviews(productId) {
         allReviews = {};
     }
     
-    // Obtener las reseñas del ID actual
     const reviews = allReviews[pId] || [];
 
     if (reviews.length === 0) {
@@ -1041,7 +951,6 @@ function renderProductReviews(productId) {
         return;
     }
 
-    // Construir la lista de opiniones en el HTML
     reviews.forEach(rev => {
         const div = document.createElement('div');
         div.className = 'cart-item';
@@ -1063,14 +972,10 @@ function renderProductReviews(productId) {
     });
 }
 
-// =========================================================================
-// INYECTOR SEGURO DEL FORMULARIO DE RESEÑAS
-// =========================================================================
 function inicializarFormularioFeedback() {
     const feedbackForm = document.getElementById('feedback-form');
     if (!feedbackForm) return;
 
-    // Removemos cualquier listener previo para evitar duplicados
     feedbackForm.removeAttribute('onsubmit'); 
     
     feedbackForm.onsubmit = function(e) {
@@ -1085,11 +990,9 @@ function inicializarFormularioFeedback() {
             return;
         }
 
-        // Obtener el usuario activo de la sesión (o Anónimo)
         const activeUser = JSON.parse(sessionStorage.getItem('activeUser'));
         const userName = activeUser ? (activeUser.name || activeUser.username) : 'Usuario Anónimo';
 
-        // Crear la nueva reseña
         const newReview = {
             user: userName,
             rating: rating,
@@ -1097,7 +1000,6 @@ function inicializarFormularioFeedback() {
             date: new Date().toLocaleDateString('es-ES')
         };
 
-        // Leer lo que ya existe en LocalStorage
         let allReviews = {};
         try {
             allReviews = JSON.parse(localStorage.getItem('productReviews')) || {};
@@ -1105,54 +1007,41 @@ function inicializarFormularioFeedback() {
             allReviews = {};
         }
 
-        // Si no existen reseñas para este producto, creamos el array
         if (!allReviews[productId]) {
             allReviews[productId] = [];
         }
         
-        // Agregar al inicio del array
         allReviews[productId].unshift(newReview); 
         
-        // Guardar a fuego en LocalStorage
         localStorage.setItem('productReviews', JSON.stringify(allReviews));
 
-        // Limpiar el formulario
         document.getElementById('feedback-comment').value = '';
         setRating(5);
         
-        // RE-RENDERIZAR INMEDIATAMENTE EN PANTALLA
-        renderProductReviews(productId); // Actualiza la lista del modal
+        renderProductReviews(productId); 
         if (typeof renderCatalog === 'function') {
-            renderCatalog(); // Actualiza las estrellas de la tienda de fondo
+            renderCatalog(); 
         }
 
         alert('🎉 ¡Reseña guardada con éxito en LocalStorage!');
     };
 }
 
-// Ejecutar la inicialización tanto al cargar la página como al abrir el modal (Doble cobertura)
 document.addEventListener('DOMContentLoaded', inicializarFormularioFeedback);
 
-// =========================================================================
-// CONTROL DE ACCESOS Y ROLES DINÁMICOS (VISTA ADMIN VS VISTA CLIENTE)
-// =========================================================================
+
 function verificarRolYAccesos() {
-    // 1. Obtener el usuario que inició sesión en esta pestaña
     const activeUser = JSON.parse(sessionStorage.getItem('activeUser'));
     const adminBtn = document.getElementById('nav-admin-btn');
 
-    // Normalizamos el rol a minúsculas
     const userRole = (activeUser && activeUser.role) ? activeUser.role.toLowerCase() : '';
 
     if (activeUser && userRole === 'admin') {
-        // SI ES ADMIN: Mostramos el botón de acceso al panel
         if (adminBtn) adminBtn.style.display = 'inline-block';
         console.log("🔓 Modo Administrador Activo. Acceso concedido al CRUD.");
     } else {
-        // SI ES CLIENTE O INVITADO: Ocultamos por completo el botón
         if (adminBtn) adminBtn.style.display = 'none';
         
-        // PROTECCIÓN EXTREMA (Por si intentan ejecutar openAdminPanel() desde la consola)
         window.openAdminPanel = function() {
             alert("🚫 Error de Autorización: No tienes permisos de administrador para acceder a este panel.");
             return false;

@@ -8,10 +8,8 @@
 </head>
 <body>
 
-    <!-- BARRA DE NAVEGACIÓN GLOBAL -->
     <header class="navbar">
         <div class="logo" id="go-to-home" style="cursor:pointer;">NEXUS<span>.</span></div>
-        <!-- Reemplaza el menú de navegación de tus otros archivos para que incluya la etiqueta de admin -->
         <nav class="nav-menu">
             <a href="index.html">Inicio</a>
             <a href="catalogo.html">Catálogo</a>
@@ -26,10 +24,8 @@
         </div>
     </header>
 
-    <!-- 1. SECCIÓN VISTA: LANDING PAGE -->
     <div id="landing-container" class="dynamic-view">
         
-        <!-- BANNER PRINCIPAL (HERO DE ALTO IMPACTO) -->
         <section class="hero-banner">
             <div class="hero-shapes">
                 <div class="shape shape-1"></div>
@@ -40,13 +36,11 @@
                 <h1>Descubre el E-Commerce<br><span class="gradient-text">Siguiente Generación</span></h1>
                 <p>Accede a piezas tecnológicas exclusivas y accesorios premium con almacenamiento autónomo y transacciones fluidas en cualquier dispositivo.</p>
                 <div class="hero-buttons">
-                    <!-- Botón destacado de llamado a la acción (CTA) que redirige directamente al catálogo -->
                     <button onclick="window.location.href='catalogo.html'" class="btn-cta primary">Explorar Tienda</button>
                 </div>
             </div>
         </section>
 
-        <!-- SECCIÓN BENEFICIOS (PILARES DE LA TIENDA EN COLUMNAS/CUADRÍCULA) -->
         <section class="benefits-section">
             <div class="benefits-grid">
                 <div class="benefit-card">
@@ -67,19 +61,16 @@
             </div>
         </section>
 
-        <!-- SECCIÓN DE PRODUCTOS DESTACADOS (CUADRÍCULA PEQUEÑA PARA 3 A 4 PRODUCTOS BIEN CALIFICADOS) -->
         <section class="featured-section">
             <div class="section-header">
                 <h2>Colecciones Destacadas</h2>
                 <p>Nuestra selección de vanguardia extraída dinámicamente de la base de datos.</p>
             </div>
-            <!-- Contenedor manipulado dinámicamente por la función renderHomeCatalog() en app.js -->
             <div class="products-grid" id="featured-products">
                 <p class="auth-subtitle" style="text-align: center; width: 100%;">Cargando piezas exclusivas...</p>
             </div>
         </section>
 
-        <!-- SECCIÓN DE TESTIMONIOS / RESEÑAS ESTÉTICAS -->
         <section class="testimonials-section">
             <div class="section-header">
                 <h2>Opiniones de la Comunidad</h2>
@@ -102,11 +93,8 @@
 
     </div>
 
-    <!-- 2. SECCIÓN MÓDULO AUTENTICACIÓN -->
-    <!-- Este contenedor es CRÍTICO. Si se elimina, app.js rompe al no encontrar los IDs de inicio de sesión/registro -->
     <div id="auth-container" class="auth-section dynamic-view" style="display: none;">
         
-        <!-- FORMULARIO DE INICIO DE SESIÓN -->
         <div id="login-card" class="auth-card">
             <h2>Iniciar Sesión</h2>
             <p class="auth-subtitle">Ingresa tus credenciales del ecosistema Nexus</p>
@@ -127,7 +115,6 @@
             </form>
         </div>
 
-        <!-- FORMULARIO DE REGISTRO -->
         <div id="register-card" class="auth-card" style="display: none;">
             <h2>Crear Cuenta</h2>
             <p class="auth-subtitle">Únete al club de compras premium</p>
@@ -158,7 +145,6 @@
             </form>
         </div>
 
-        <!-- FORMULARIO DE RECUPERACIÓN DE CONTRASEÑA -->
         <div id="recover-card" class="auth-card" style="display: none;">
             <h2>Recuperar Acceso</h2>
             <p class="auth-subtitle">Introduce tu correo para leer la contraseña de la persistencia</p>
@@ -175,10 +161,8 @@
         </div>
     </div>
 
-    <!-- PIE DE PÁGINA GLOBAL (FOOTER) -->
     <footer class="footer">
         
-        <!-- FORMULARIO DE SUSCRIPCIÓN AL NEWSLETTER (CAPTURA AL FINAL DE LA PÁGINA) -->
         <div class="newsletter-card" style="margin-bottom: 2.5rem;">
             <h2>Suscripción al Club de Innovación</h2>
             <p>Introduce tu email para capturar tu suscripción en nuestro newsletter local.</p>
@@ -190,7 +174,6 @@
         
         <div class="footer-bottom">
             <p>© 2026 NEXUS Labs E-Commerce. Todos los derechos reservados.</p>
-            <!-- INDICADOR VISUAL DINÁMICO (ONLINE / OFFLINE) -->
             <div id="connection-status" class="status-indicator online">
                 <span class="status-dot"></span><span id="status-text">Sistema En Línea</span>
             </div>
