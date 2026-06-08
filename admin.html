@@ -8,7 +8,6 @@
 </head>
 <body>
 
-    <!-- BARRA DE NAVEGACIÓN GLOBAL -->
     <header class="navbar">
         <div class="logo" id="go-to-home" style="cursor:pointer;">NEXUS<span>.</span></div>
         <nav class="nav-menu">
@@ -23,14 +22,12 @@
         </div>
     </header>
 
-    <!-- PANEL DE ADMINISTRACIÓN PRINCIPAL -->
     <div id="admin-container" class="catalog-section dynamic-view">
         <div class="section-header sh-left">
             <h2 class="text-gradient">Panel de Control Administrativo</h2>
             <p>Gestión global de inventario, analíticas de rendimiento y distribución de órdenes.</p>
         </div>
 
-        <!-- REQUERIMIENTO 6: PANEL VISUAL DE MÉTRICAS -->
         <section class="admin-metrics-grid">
             <div class="metric-card">
                 <div class="icon-wrapper" style="background: linear-gradient(135deg, #10b981, #059669);">💰</div>
@@ -57,10 +54,8 @@
             </div>
         </section>
 
-        <!-- LAYOUT DE GESTIÓN (CRUD + VENTAS) -->
         <div class="catalog-layout" style="margin-top: 3rem;">
             
-            <!-- FORMULARIO CRUD (CREAR / EDITAR) -->
             <aside class="filter-sidebar">
                 <h3 id="form-crud-title">📦 Agregar Nuevo Producto</h3>
                 <form id="crud-product-form" style="margin-top: 1rem;">
@@ -88,10 +83,8 @@
                 </form>
             </aside>
 
-            <!-- TABLAS DE CONTROL (INVENTARIO Y HISTORIAL DE VENTAS) -->
             <main style="display: flex; flex-direction: column; gap: 3rem; overflow-x: auto;">
                 
-                <!-- TABLA DE INVENTARIO -->
                 <div class="main-cart-items-block" style="background: var(--bg-surface);">
                     <h3 style="margin-bottom: 1rem;" class="text-gradient">Inventario de Productos</h3>
                     <table style="width: 100%; border-collapse: collapse; text-align: left;">
@@ -105,12 +98,10 @@
                             </tr>
                         </thead>
                         <tbody id="admin-inventory-table-body">
-                            <!-- Inyección dinámica -->
                         </tbody>
                     </table>
                 </div>
 
-                <!-- TABLA DE HISTORIAL DE VENTAS -->
                 <div class="main-cart-items-block" style="background: var(--bg-surface);">
                     <h3 style="margin-bottom: 1rem;" class="text-gradient">Control de Historial de Ventas</h3>
                     <table style="width: 100%; border-collapse: collapse; text-align: left;">
@@ -124,7 +115,6 @@
                             </tr>
                         </thead>
                         <tbody id="admin-sales-table-body">
-                            <!-- Inyección dinámica -->
                         </tbody>
                     </table>
                 </div>
@@ -132,7 +122,6 @@
         </div>
     </div>
 
-    <!-- FOOTER GLOBAL -->
     <footer class="footer">
         <div class="footer-bottom">
             <p>© 2026 NEXUS Labs E-Commerce. Todos los derechos reservados.</p>
